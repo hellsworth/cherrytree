@@ -51,6 +51,7 @@ apps:
       GTK_PATH: $SNAP/lib/gtk-2.0
       GTK_DATA_PREFIX: $SNAP
       XDG_DATA_DIRS: $SNAP/share:$XDG_DATA_DIRS
+      ENCHANT_CONFIG_DIR: $SNAP/usr/share/hunspell
 
 parts:
   desktop-gtk:
@@ -117,5 +118,24 @@ parts:
       - python-dbus
       - python-enchant
       - python-chardet
+      - hunspell-en-us
+      - xterm
+      - python3-gtkspellcheck
     prime:
       - -usr/bin/7za
+
+#  spellcheck-dictionaries:
+#    plugin: nil
+#    override-build: |
+#      set -eu
+#      # Download all dictionary packages, and extract to install prefix
+#      apt download $(apt-cache showpkg hunspell-dictionary | awk '/Pa/, /Reverse P/ {next} {print $1 | "sort"}')
+#      find -name '*.deb' | xargs --max-args=1 --replace={} --verbose dpkg-deb --extract {} ../install
+#    filesets:
+#      dictionaries:
+#        - usr/share/hunspell/*
+#        - usr/share/myspell/*
+#    stage:
+#      - $dictionaries
+#    prime:
+#      - $dictionaries
