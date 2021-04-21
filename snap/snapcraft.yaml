@@ -26,7 +26,6 @@ apps:
     common-id: com.giuspen.cherrytree
     environment:
       PATH: $SNAP/usr/lib/p7zip:$PATH
-      #GTK_PATH: $SNAP/lib/gtk-2.0
       GTK_DATA_PREFIX: $SNAP
       XDG_DATA_DIRS: $SNAP/share:$XDG_DATA_DIRS
 
@@ -40,13 +39,15 @@ parts:
   cherrytree:
     after: [ uchardet ]
     source: .
-    source-tag: '0.99.35'
+    source-type: git
+    source-tag: '0.99.36'
     plugin: cmake
     build-snaps: [ gnome-3-38-2004-sdk/latest/candidate ]
-    # override-build: |
-    #   set -eux
-    # apt install -y uchardet
-    #snapcraftctl build
+    override-build: |
+      set -eux
+      cd $SNAPCRAFT_PART_SRC
+      ./build.sh
+      #snapcraftctl build
     #  cd pygtk2
     #  python2.7 setup.py install --prefix=$SNAPCRAFT_PART_INSTALL/usr -f 
     #  sed -i 's|^Icon=.*|Icon=${SNAP}/meta/gui/cherrytree.png|' linux/cherrytree.desktop
@@ -57,16 +58,19 @@ parts:
     #  mkdir -p $SNAPCRAFT_PART_INSTALL/share/applications/
     #  cp linux/cherrytree.desktop $SNAPCRAFT_PART_INSTALL/share/applications/
     build-packages:
-      #- python2.7
+      - build-essential
+      - cmake
       - desktop-file-utils
       - gettext
-      #- libglibmm-2.4-dev
       - libcurl4-openssl-dev
       - libfmt-dev
       - libgtksourceviewmm-3.0-dev
       - libsigc++-2.0-dev
       - libspdlog-dev
+      - libgspell-1-dev
+      - libsqlite3-dev
       - libxml++2.6-dev
+      - ninja-build
     #stage-packages:
       #- python2.7-minimal
       #- python-gtk2
