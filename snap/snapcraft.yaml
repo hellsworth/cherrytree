@@ -43,6 +43,8 @@ parts:
     source-tag: '0.99.36'
     plugin: cmake
     build-snaps: [ gnome-3-38-2004-sdk/latest/candidate ]
+    build-environment:
+      - PATH: $SNAPCRAFT_STAGE/usr/local/include:$PATH
     override-build: |
       set -eux
       cd $SNAPCRAFT_PART_SRC
