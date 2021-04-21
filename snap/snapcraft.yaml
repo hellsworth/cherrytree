@@ -31,12 +31,22 @@ apps:
       XDG_DATA_DIRS: $SNAP/share:$XDG_DATA_DIRS
 
 parts:
+  uchardet:
+    source: https://github.com/freedesktop/uchardet.git
+    source-tag: 'v0.0.7'
+    plugin: cmake
+    
+
   cherrytree:
+    after: [ uchardet ]
     source: .
     source-tag: '0.99.35'
     plugin: cmake
-    #override-build: |
-    #  set -x
+    build-snaps: [ gnome-3-38-2004-sdk/latest/candidate ]
+    # override-build: |
+    #   set -eux
+    # apt install -y uchardet
+    #snapcraftctl build
     #  cd pygtk2
     #  python2.7 setup.py install --prefix=$SNAPCRAFT_PART_INSTALL/usr -f 
     #  sed -i 's|^Icon=.*|Icon=${SNAP}/meta/gui/cherrytree.png|' linux/cherrytree.desktop
@@ -50,16 +60,20 @@ parts:
       #- python2.7
       - desktop-file-utils
       - gettext
-      - libglibmm-2.4-dev
+      #- libglibmm-2.4-dev
+      - libcurl4-openssl-dev
+      - libfmt-dev
       - libgtksourceviewmm-3.0-dev
       - libsigc++-2.0-dev
-    stage-packages:
+      - libspdlog-dev
+      - libxml++2.6-dev
+    #stage-packages:
       #- python2.7-minimal
       #- python-gtk2
       #- python-gtksourceview2
-      - p7zip-full
-      - python-dbus
-      - python-chardet
-      - python3-urllib3
+      #- p7zip-full
+      #- python-dbus
+      #- python-chardet
+      #- python3-urllib3
     prime:
       - -usr/bin/7za
